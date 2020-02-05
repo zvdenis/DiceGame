@@ -8,6 +8,9 @@ public class Player {
     private int lastPlayedRound = -1;
     private Game playerGame;
 
+    Player(){
+
+    }
 
     Player(Game game) {
         playerGame = game;
@@ -17,13 +20,15 @@ public class Player {
 
     public void playGame() {
         while (!playerGame.isGameFinished()) {
-            playerGame.throwDice(this);
-//            if (playerGame.getRoundsPlayed() > lastPlayedRound) {
-//                lastPlayedRound++;
-//                if (!playerGame.isRoundFinished()) {
-//
-//                }
-//            }
+
+            System.out.print("");
+            if (playerGame.getRoundsPlayed() > lastPlayedRound) {
+                //System.out.print("");
+                lastPlayedRound++;
+                if (!playerGame.isRoundFinished()) {
+                    playerGame.throwDice(this);
+                }
+            }
         }
     }
 
@@ -46,4 +51,17 @@ public class Player {
     public void addRoundWon() {
         roundsWon++;
     }
+
+    public String toString(){
+        return  "Player" + playerID +  " score: " + getLastRoundScore() + " total rounds won:" + roundsWon;
+    }
+
+    public Player clone(){
+        Player cloned = new Player();
+        cloned.playerID = this.playerID;
+        cloned.roundsWon = this.roundsWon;
+        cloned.lastRoundScore = this.lastRoundScore;
+        return cloned;
+    }
+
 }
