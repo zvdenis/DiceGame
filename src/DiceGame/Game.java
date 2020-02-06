@@ -1,6 +1,5 @@
 package DiceGame;
 
-import javax.print.attribute.standard.Finishings;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -23,6 +22,7 @@ public class Game {
     //private ArrayList<Thread> threads = new ArrayList<>();
     private Player roundWinner;
     private Player prevRoundWinner;
+    private Player currentPlayer;
     private Observer observer;
     private boolean diceFree = true;
     private boolean gameFinished;
@@ -58,16 +58,21 @@ public class Game {
         if (score > roundWinner.getLastRoundScore()) {
             roundWinner = player;
         }
-        System.out.println(player.getPlayerID() + " " + score);
+        currentPlayer = player;
+        observer.wakePlayerObserver();
+        //System.out.println(player.getPlayerID() + " " + score);
 
         if (isRoundFinished()) {
-            System.out.println();
-            prevRoundWinner = roundWinner.clone();
-            observer.wakeObserver();
-            roundsPlayed++;
             roundWinner.addRoundWon();
+            prevRoundWinner = roundWinner.clone();
+            observer.wakeRoundObserver();
+            roundsPlayed++;
             playersParticipated = 0;
             roundWinner.setLastRoundScore(-11);
+            if(roundWinner.getRoundsWon() >= getM()){
+                gameFinished = true;
+                finishGame();
+            }
         }
     }
 
@@ -102,7 +107,13 @@ public class Game {
     }
 
     private synchronized void finishGame() {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         notifyAll();
+        observer.stopObserver();
     }
 
     public int getN() {
@@ -140,7 +151,16 @@ public class Game {
     }
 
     public boolean isGameFinished() {
-        if (roundsPlayed >= getN()) finishGame();
-        return roundsPlayed >= getN();
+
+        return gameFinished;
     }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public Player getRoundWinner() {
+        return roundWinner;
+    }
+
 }
