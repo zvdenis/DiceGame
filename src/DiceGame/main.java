@@ -22,8 +22,7 @@ public class main {
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-            ex.printStackTrace();
-
+            System.out.println("Cant parse input");
         }
 
 

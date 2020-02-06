@@ -1,17 +1,19 @@
 package DiceGame;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 
 public class Game {
 
     private static Random random = new Random();
-    public static final int nMin = 2;
-    public static final int nMax = 6;
-    public static final int kMin = 2;
-    public static final int kMax = 5;
-    public static final int mMin = 1;
-    public static final int mMax = 100;
+    private static final int nMin = 2;
+    private static final int nMax = 6;
+    private static final int kMin = 2;
+    private static final int kMax = 5;
+    private static final int mMin = 1;
+    private static final int mMax = 100;
     private int n;
     private int k;
     private int m;
@@ -42,6 +44,7 @@ public class Game {
     }
 
     public void generatePlayers() {
+        getPlayers().clear();
         for (int i = 0; i < getN(); i++) {
             getPlayers().add(new Player(this));
         }
@@ -58,7 +61,7 @@ public class Game {
         if (score > roundWinner.getLastRoundScore()) {
             roundWinner = player;
         }
-        currentPlayer = player;
+        currentPlayer = player.clone();
         observer.wakePlayerObserver();
         //System.out.println(player.getPlayerID() + " " + score);
 
@@ -74,10 +77,6 @@ public class Game {
                 finishGame();
             }
         }
-    }
-
-    private void observe(){
-
     }
 
     public void startGame() {
@@ -107,13 +106,12 @@ public class Game {
     }
 
     private synchronized void finishGame() {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+
+        Collections.sort(players, Collections.reverseOrder());
         notifyAll();
         observer.stopObserver();
+
     }
 
     public int getN() {
@@ -157,6 +155,14 @@ public class Game {
 
     public Player getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public int getPlayersParticipated() {
+        return playersParticipated;
+    }
+
+    public void setPlayersParticipated(int x) {
+        playersParticipated = x;
     }
 
     public Player getRoundWinner() {

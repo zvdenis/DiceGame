@@ -1,7 +1,7 @@
 package DiceGame;
 
-public class Player {
-    private static int playerIDGenerator = 1;
+public class Player implements Comparable<Player> {
+    public static int playerIDGenerator = 1;
     private int lastRoundScore;
     private int roundsWon;
     private int playerID;
@@ -12,7 +12,7 @@ public class Player {
 
     }
 
-    Player(Game game) {
+    public Player(Game game) {
         playerGame = game;
         playerID = playerIDGenerator++;
     }
@@ -41,7 +41,7 @@ public class Player {
         lastRoundScore = score;
     }
 
-    public int getRoundsWon() {
+    public Integer getRoundsWon() {
         return roundsWon;
     }
 
@@ -65,4 +65,8 @@ public class Player {
         return cloned;
     }
 
+    @Override
+    public int compareTo(Player player) {
+        return this.getRoundsWon().compareTo(player.getRoundsWon());
+    }
 }
