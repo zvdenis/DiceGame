@@ -24,8 +24,10 @@ public class Observer {
                 }
             }
             if (observePlayer) {
-                observePlayer = false;
-                System.out.println("Player" + observerGame.getCurrentPlayer().getPlayerID() + " throws " + observerGame.getCurrentPlayer().getLastRoundScore() + "  round leader: Player" + observerGame.getRoundWinner().getPlayerID());
+                synchronized (observerGame.getCurrentPlayer()) {
+                    observePlayer = false;
+                    System.out.println("Player" + observerGame.getCurrentPlayer().getPlayerID() + " throws " + observerGame.getCurrentPlayer().getLastRoundScore() + "  round leader: Player" + observerGame.getRoundWinner().getPlayerID());
+                }
             }
             if (!roundIsOn) {
                 roundIsOn = true;

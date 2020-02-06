@@ -41,6 +41,7 @@ public class Game {
         generatePlayers();
         roundWinner = players.get(0);
         roundWinner.setLastRoundScore(-11);
+        currentPlayer = roundWinner;
     }
 
     public void generatePlayers() {
@@ -61,7 +62,9 @@ public class Game {
         if (score > roundWinner.getLastRoundScore()) {
             roundWinner = player;
         }
-        currentPlayer = player.clone();
+        synchronized (currentPlayer) {
+            currentPlayer = player.clone();
+        }
         observer.wakePlayerObserver();
         //System.out.println(player.getPlayerID() + " " + score);
 
