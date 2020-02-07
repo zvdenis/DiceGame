@@ -66,7 +66,7 @@ public class Game {
             currentPlayer = player.clone();
         }
         observer.wakePlayerObserver();
-        //System.out.println(player.getPlayerID() + " " + score);
+        System.out.print("");
 
         if (isRoundFinished()) {
             roundWinner.addRoundWon();
