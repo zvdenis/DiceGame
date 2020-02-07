@@ -5,7 +5,7 @@ public class Player implements Comparable<Player> {
     private int lastRoundScore;
     private int roundsWon;
     private int playerID;
-    //TODO
+    //TODO rename to private
     public int lastPlayedRound = -1;
     private Game playerGame;
 
