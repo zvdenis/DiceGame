@@ -29,6 +29,7 @@ public class Game {
     private boolean diceFree = true;
     private boolean gameFinished;
 
+
     public Game(int N, int K, int M) {
         if (N > nMax || N < nMin
                 || K > kMax || K < kMin
@@ -52,6 +53,12 @@ public class Game {
     }
 
     public synchronized void throwDice(Player player) {
+        //System.out.println("Ww" + player.getLastRoundScore() + " " + roundWinner.lastPlayedRound+ " " + roundsPlayed);
+        player.lastPlayedRound = roundsPlayed;
+        if(isRoundFinished()){
+            player.lastPlayedRound++;
+            return;
+        }
         int score = 0;
         playersParticipated++;
         for (int i = 0; i < getK(); i++) {
@@ -66,7 +73,7 @@ public class Game {
             currentPlayer = player.clone();
         }
         observer.wakePlayerObserver();
-        System.out.print("");
+        //System.out.println(player.getPlayerID() + " " + score + " " + player.lastPlayedRound);
 
         if (isRoundFinished()) {
             roundWinner.addRoundWon();

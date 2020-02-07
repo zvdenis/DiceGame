@@ -5,7 +5,8 @@ public class Player implements Comparable<Player> {
     private int lastRoundScore;
     private int roundsWon;
     private int playerID;
-    private int lastPlayedRound = -1;
+    //TODO
+    public int lastPlayedRound = -1;
     private Game playerGame;
 
     Player() {
@@ -27,6 +28,7 @@ public class Player implements Comparable<Player> {
                     lastPlayedRound++;
                     if (!playerGame.isRoundFinished()) {
                         playerGame.throwDice(this);
+
                     }
                 }
             }
