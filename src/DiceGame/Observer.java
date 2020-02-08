@@ -59,7 +59,9 @@ public class Observer {
     }
 
     private void printPlayerInfo(Message message) {
-        System.out.println("Player" + message.player.getPlayerID() + " throws " + message.player.getLastRoundScore() + "  round leader: Player" + message.roundWinner.getPlayerID());
+        System.out.println("Player" + message.player.getPlayerID()
+                + " throws " + message.player.getLastRoundScore()
+                + "  round leader: Player" + message.roundWinner.getPlayerID());
     }
 
     private void printRoundInfo(Message message) {
