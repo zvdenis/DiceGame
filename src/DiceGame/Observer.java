@@ -1,13 +1,36 @@
 package DiceGame;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
+
+
+enum MessageType {
+    PLAYERINFO,
+    ROUNDINFO
+}
+
+class Message {
+
+    MessageType messageType;
+    Player player;
+    Player roundWinner;
+
+    Message(Player player, Player roundWinner, MessageType messageType) {
+        this.messageType = messageType;
+        this.player = player;
+        this.roundWinner = roundWinner;
+    }
+}
+
 
 public class Observer {
 
+
     private Game observerGame;
     private boolean observe = true;
-    private boolean roundIsOn = true;
     private boolean observePlayer = false;
+    ArrayDeque<Message> queue = new ArrayDeque<>();
 
     public Observer(Game observerGame) {
         this.observerGame = observerGame;
@@ -15,7 +38,7 @@ public class Observer {
 
     public synchronized void observeRound() {
         while (observe) {
-            if (roundIsOn && !observePlayer) {
+            if (queue.size() < 1) {
                 try {
                     wait();
                     continue;
@@ -23,24 +46,24 @@ public class Observer {
                     e.printStackTrace();
                 }
             }
-            if (observePlayer) {
-                synchronized (observerGame.getCurrentPlayer()) {
-                    observePlayer = false;
-                    System.out.println("Player" + observerGame.getCurrentPlayer().getPlayerID() + " throws " + observerGame.getCurrentPlayer().getLastRoundScore() + "  round leader: Player" + observerGame.getRoundWinner().getPlayerID());
+            while (queue.size() != 0) {
+                Message message = queue.poll();
+                if (message.messageType == MessageType.PLAYERINFO) {
+                    printPlayerInfo(message);
                 }
-            }
-            if (!roundIsOn) {
-                roundIsOn = true;
-                Player winner = observerGame.getPrevRoundWinner();
-                System.out.println("winner - " + winner.toString() + "\n\n");
+                if (message.messageType == MessageType.ROUNDINFO) {
+                    printRoundInfo(message);
+                }
             }
         }
     }
 
+    private void printPlayerInfo(Message message) {
+        System.out.println("Player" + message.player.getPlayerID() + " throws " + message.player.getLastRoundScore() + "  round leader: Player" + message.roundWinner.getPlayerID());
+    }
 
-    public synchronized void wakeRoundObserver() {
-        roundIsOn = false;
-        this.notifyAll();
+    private void printRoundInfo(Message message) {
+        System.out.println("winner - " + message.player.toString() + "\n\n");
     }
 
     public synchronized void wakePlayerObserver() {
@@ -64,6 +87,11 @@ public class Observer {
         System.out.println(drawCurrentTable(observerGame.getPlayers()));
     }
 
+    public void addMessage(Player player, Player roundWinner, MessageType messageType) {
+        Message message = new Message(player, roundWinner, messageType);
+        queue.add(message);
+        wakePlayerObserver();
+    }
 
     public Game getObserverGame() {
         return observerGame;
@@ -71,10 +99,6 @@ public class Observer {
 
     public boolean isObserve() {
         return observe;
-    }
-
-    public boolean isRoundIsOn() {
-        return roundIsOn;
     }
 
     public boolean isObservePlayer() {

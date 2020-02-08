@@ -55,7 +55,7 @@ public class Game {
     public synchronized void throwDice(Player player) {
         //System.out.println("Ww" + player.getLastRoundScore() + " " + roundWinner.lastPlayedRound+ " " + roundsPlayed);
         player.lastPlayedRound = roundsPlayed;
-        if(isRoundFinished()){
+        if (isRoundFinished()) {
             player.lastPlayedRound++;
             return;
         }
@@ -72,21 +72,24 @@ public class Game {
         synchronized (currentPlayer) {
             currentPlayer = player.clone();
         }
-        observer.wakePlayerObserver();
+        observer.addMessage(player.clone(), roundWinner.clone(), MessageType.PLAYERINFO);
+
         //System.out.println(player.getPlayerID() + " " + score + " " + player.lastPlayedRound);
+
 
         if (isRoundFinished()) {
             roundWinner.addRoundWon();
             prevRoundWinner = roundWinner.clone();
-            observer.wakeRoundObserver();
+            observer.addMessage(roundWinner.clone(), roundWinner.clone(), MessageType.ROUNDINFO);
             roundsPlayed++;
             playersParticipated = 0;
             roundWinner.setLastRoundScore(-11);
-            if(roundWinner.getRoundsWon() >= getM()){
+            if (roundWinner.getRoundsWon() >= getM()) {
                 gameFinished = true;
                 finishGame();
             }
         }
+
     }
 
     public void startGame() {

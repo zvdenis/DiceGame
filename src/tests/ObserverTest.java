@@ -18,11 +18,6 @@ class ObserverTest {
         observer = new Observer(null);
     }
 
-    @Test
-    void wakeRoundObserver() {
-        observer.wakeRoundObserver();
-        assertEquals(false, observer.isRoundIsOn());
-    }
 
     @Test
     void wakePlayerObserver() {

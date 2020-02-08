@@ -1,5 +1,7 @@
 package DiceGame;
 
+import java.util.PriorityQueue;
+
 public class Player implements Comparable<Player> {
     public static int playerIDGenerator = 1;
     private int lastRoundScore;
@@ -8,6 +10,9 @@ public class Player implements Comparable<Player> {
     //TODO rename to private
     public int lastPlayedRound = -1;
     private Game playerGame;
+
+
+
 
     Player() {
 
